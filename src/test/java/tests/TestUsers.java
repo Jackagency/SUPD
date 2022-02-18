@@ -3,6 +3,8 @@ package tests;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
+import pages.UserPageComponents;
+import pages.UserPageObjects;
 
 
 import java.time.Duration;
@@ -13,8 +15,11 @@ import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Condition.*;
 
 
-
 public class TestUsers {
+
+    UserPageComponents userPageComponents = new UserPageComponents();
+    UserPageObjects userPageObjects = new UserPageObjects();
+
     @BeforeAll
     static void beforeAll() {
         Configuration.baseUrl = "http://192.168.151.19:8080/";
@@ -37,43 +42,43 @@ public class TestUsers {
         }
 
         open("/users");
-        //login
-        $("[data-id=login_login]").setValue("admin").pressEnter();
-        $("[data-id=login_password]").setValue("123").pressEnter();
-        $("[data-id=login_submit]").click();
+        userPageComponents.authorizeSupd("admin", "123");
+        userPageComponents.userCreateButton();
 
-        //create button click
-        $("#user_create_btn").shouldBe(visible).click();
-        //fill in the fields
-        $("#user_surname").shouldBe(visible).setValue(String.valueOf(word));
-        $("#user_name").setValue(String.valueOf(word));
-        $("#user_patronymic").setValue(String.valueOf(word));
-        $("#user_login").setValue(String.valueOf(word));
-        $("#user_kadr_id").scrollIntoView(false).setValue("1112223334");
-        $("#user_add_identity").scrollIntoView(false).setValue("1112223334");
-        $("#user_password").scrollIntoView(false).setValue("123");
-        $("#user_email").scrollIntoView(false).setValue("123@ya.ru");
-        $("#reason_form_reason").scrollIntoView(false).setValue("because");
-        $("#reason_form_type").scrollIntoView(false).setValue("because2");
-        $("#reason_form_number").scrollIntoView(false).setValue("3234");
-        $("#reason_form_fullname_agreement").scrollIntoView(false).setValue("Petrov Ivan Dmitrievich");
-        $("#reason_form_date_agreement").scrollIntoView(false).setValue("30.10.2020");
-        //click submit button
-        $("#user_edit_submit").scrollIntoView(false).shouldBe(visible).click();
-        $("#user_edit_submit").shouldBe(not(visible), Duration.ofMillis(15000));
-        //creation check
-        $(".dx-column-lines", 1).shouldBe(visible).shouldHave(text(String.valueOf(word)));
-        //click info button
-        $("[data-id=user_show_info]").scrollIntoView(false).shouldBe(visible).click();
-        //check results
-        $("#user_info_surname").shouldHave(text(String.valueOf(word)));
-        $("#user_info_name").shouldHave(text(String.valueOf(word)));
-        $("#user_info_patronymic").shouldHave(text(String.valueOf(word)));
-        $("#user_info_login").shouldHave(text(String.valueOf(word)));
-        $("#user_info_kadr_id").scrollIntoView(false).shouldHave(text("1112223334"));
-        $("#user_info_email").scrollIntoView(false).shouldHave(text("123@ya.ru"));
-        $("#user_info_active").scrollIntoView(false).shouldHave(text("Активный"));
-        $("#user_info_account_type").scrollIntoView(false).shouldHave(text("Нет типа"));
+        userPageObjects
+                .setUserSurname(String.valueOf(word))
+                .setUsetName(String.valueOf(word))
+                .setUserPatronymic(String.valueOf(word))
+                .setUserLogin(String.valueOf(word))
+                .setUserKadrId("1112223334")
+                .setUserTabel("1112223334")
+                .setUserPassword("123")
+                .setUserEmail("123@ya.ru");
+
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+
+        userPageComponents.userCreateSubmitButton();
+
+
+        userPageObjects.newUserCheck(String.valueOf(word));
+
+        userPageComponents.clickInfoButton();
+
+        userPageComponents.userInfoCheck(
+                String.valueOf(word),
+                String.valueOf(word),
+                String.valueOf(word),
+                String.valueOf(word),
+                "1112223334",
+                "123@ya.ru",
+                "Активный",
+                "Нет типа");
+
     }
 
     @Test
