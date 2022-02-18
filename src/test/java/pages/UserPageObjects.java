@@ -1,6 +1,7 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -20,6 +21,8 @@ public class UserPageObjects {
     SelenideElement userEmailInput = $("#user_email");
 
     SelenideElement firstLineInTheTable = $(".dx-column-lines", 1);
+
+    SelenideElement userSearchInput = $("#user_search");
 
 
     //actions
@@ -60,12 +63,26 @@ public class UserPageObjects {
     }
 
     public UserPageObjects setUserEmail(String email) {
+        userEmailInput.scrollIntoView(false).sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         userEmailInput.scrollIntoView(false).setValue(email);
         return this;
     }
 
     public UserPageObjects newUserCheck(String surname){
         firstLineInTheTable.shouldBe(visible).shouldHave(text(surname));
+        return this;
+    }
+
+    public UserPageObjects clearUserCreationFields(){
+        userSurnameInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        userNameInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        userPatronymicInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        userLoginInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        return this;
+    }
+
+    public UserPageObjects userSearch(String value){
+        userSearchInput.setValue(value).pressEnter();
         return this;
     }
 

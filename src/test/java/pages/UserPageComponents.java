@@ -80,12 +80,47 @@ public class UserPageComponents {
         userCreateSubmitButton.shouldBe(not(visible), Duration.ofMillis(15000));
         return this;
     }
+    public UserPageComponents userDeleteSubmitButton(){
+        SelenideElement userDeleteSubmitButton = $("[data-id=confirm_submit]");
+        userDeleteSubmitButton.scrollIntoView(false).shouldBe(visible).click();
+        userDeleteSubmitButton.shouldBe(not(visible), Duration.ofMillis(15000));
+        return this;
+    }
 
     public UserPageComponents clickInfoButton(){
         SelenideElement userInfoButton = $("[data-id=user_show_info]");
         userInfoButton.scrollIntoView(false).shouldBe(visible).click();
         return this;
     }
+    public UserPageComponents clickActionButton(){
+        SelenideElement userActionButton = $("[data-id=actions_btn]");
+        userActionButton.scrollIntoView(false).shouldBe(visible).click();
+        return this;
+    }
+
+    public UserPageComponents clickUserEditButton(){
+        SelenideElement userUserEditButton = $("[data-id=actions_btn_edit]");
+        userUserEditButton.shouldBe(visible).click();
+        return this;
+    }
+    public UserPageComponents clickUserDeleteButton(){
+        SelenideElement userUserDeleteButton = $("[data-id=actions_btn_delete]");
+        userUserDeleteButton.shouldBe(visible).click();
+        return this;
+    }
+
+    public UserPageComponents scrollUserTableTobegin(){
+        SelenideElement userSurnameTable = $("#dx-col-101");
+        userSurnameTable.scrollIntoView(true).shouldHave(text("Фамилия"));
+        return this;
+    }
+
+    public UserPageComponents emptyTableCheck(){
+        SelenideElement emptyTableSign = $(".dx-datagrid-nodata");
+        emptyTableSign.shouldBe(visible).shouldHave(text("Нет данных"));
+        return this;
+    }
+
 
 
 }
