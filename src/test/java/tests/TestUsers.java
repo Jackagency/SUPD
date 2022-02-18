@@ -2,17 +2,15 @@ package tests;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.Keys;
 import pages.UserPageComponents;
 import pages.UserPageObjects;
 
 
-import java.time.Duration;
+
 import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Condition.*;
+
 
 
 public class TestUsers {
@@ -33,7 +31,7 @@ public class TestUsers {
 
     @Test
     @DisplayName("User create")
-    public void userCreate() throws InterruptedException {
+    public void userCreate() {
         Random random = new Random();
         //random word
         StringBuilder word = new StringBuilder(15);
@@ -81,7 +79,7 @@ public class TestUsers {
 
     @Test
     @DisplayName("User edit")
-    public void userEdit() throws InterruptedException {
+    public void userEdit(){
         //random word
         Random random = new Random();
         StringBuilder word = new StringBuilder(15);
@@ -157,7 +155,7 @@ public class TestUsers {
 
     @Test
     @DisplayName("User delete")
-    public void userDelete() throws InterruptedException {
+    public void userDelete(){
         //random word
         Random random = new Random();
         StringBuilder word = new StringBuilder(15);
