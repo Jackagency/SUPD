@@ -1,12 +1,13 @@
 package tests;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.*;
 import pages.UserPageComponents;
 import pages.UserPageObjects;
 
 
-
+import java.time.Duration;
 import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.*;

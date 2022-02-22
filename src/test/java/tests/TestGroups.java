@@ -33,7 +33,11 @@ public class TestGroups {
 
         $("div.v-btn-toggle a:nth-child(2) span").click();
 
-        $("div.groups__actions:nth-child(1) span").click();
+        $("[data-id=groups__actions_btn-create]").click();
+        $("div:nth-child(2) >  div > div.v-input__slot div").setValue("Группа");
+
+
+
 
 
         sleep(5000);

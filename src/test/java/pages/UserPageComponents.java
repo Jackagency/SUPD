@@ -1,5 +1,6 @@
 package pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
 import java.time.Duration;
@@ -27,10 +28,10 @@ public class UserPageComponents {
     //основание
     public UserPageComponents reasonForm (String reason, String type, String number, String name, String date){
 
-        SelenideElement userReasonInput = $("#reason_form_reason");
-        SelenideElement userReasonTypeInput = $("#reason_form_type");
-        SelenideElement userReasonNumberInput = $("#reason_form_number");
-        SelenideElement userAgreementNameInput = $("#reason_form_fullname_agreement");
+        SelenideElement userReasonInput = $("[data-id=reason_form_reason]");
+        SelenideElement userReasonTypeInput = $("[data-id=reason_form_type]");
+        SelenideElement userReasonNumberInput = $("[data-id=reason_form_number]");
+        SelenideElement userAgreementNameInput = $("[data-id=reason_form_fullname_agreement]");
         SelenideElement userAgreementDate = $("#reason_form_date_agreement");
 
         userReasonInput.scrollIntoView(false).setValue(reason);
@@ -76,14 +77,19 @@ public class UserPageComponents {
 
     public UserPageComponents userCreateSubmitButton(){
         SelenideElement userCreateSubmitButton = $("#user_edit_submit");
+        SelenideElement toolbarText = $("div.dx-toolbar-before div.dx-item-content div");
         userCreateSubmitButton.scrollIntoView(false).shouldBe(visible).click();
         userCreateSubmitButton.shouldBe(not(visible), Duration.ofMillis(15000));
+        toolbarText.shouldBe(Condition.not(Condition.visible), Duration.ofMillis(15000));
+
         return this;
     }
     public UserPageComponents userDeleteSubmitButton(){
         SelenideElement userDeleteSubmitButton = $("[data-id=confirm_submit]");
+        SelenideElement toolbarText = $("div.dx-toolbar-before div.dx-item-content div");
         userDeleteSubmitButton.scrollIntoView(false).shouldBe(visible).click();
         userDeleteSubmitButton.shouldBe(not(visible), Duration.ofMillis(15000));
+        toolbarText.shouldBe(Condition.not(Condition.visible), Duration.ofMillis(15000));
         return this;
     }
 
