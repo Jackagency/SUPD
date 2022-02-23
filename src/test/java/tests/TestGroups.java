@@ -2,10 +2,13 @@ package tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pages.GroupPageComponents;
+import pages.GroupPageObjects;
 import pages.UserPageComponents;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -13,6 +16,9 @@ import static com.codeborne.selenide.Selenide.*;
 public class TestGroups {
 
     UserPageComponents userPageComponents = new UserPageComponents();
+    GroupPageComponents groupPageComponents = new GroupPageComponents();
+    GroupPageObjects groupPageObjects = new GroupPageObjects();
+    Faker faker = new Faker();
 
     @BeforeAll
     static void beforeAll() {
@@ -27,15 +33,17 @@ public class TestGroups {
 
     @Test
     @DisplayName("Group creation")
-    public void groupCreate(){
+    public void groupCreate() {
+        String groupName = faker.hobbit().character();
         open("login");
         userPageComponents.authorizeSupd("admin", "123");
 
-        $("div.v-btn-toggle a:nth-child(2) span").click();
+        groupPageComponents.mainGroupClick();
+        groupPageComponents.groupCreateButtonClick();
 
-        $("[data-id=groups__actions_btn-create]").click();
-        $("div:nth-child(2) >  div > div.v-input__slot div").setValue("Группа");
-        $("div:nth-child(4) div.v-input__slot > div").setValue("Поле описания группы");
+        groupPageObjects
+                .setGroupName(groupName)
+                .setGroupDescription(groupName);
 
         userPageComponents.reasonForm(
                 "because",
@@ -44,14 +52,8 @@ public class TestGroups {
                 "Petrov Ivan Dmitrievich",
                 "30.10.2020");
 
-
-
-
-
-
-
-        sleep(5000);
-
+        groupPageComponents.clickGroupSubmitButton();
+        groupPageObjects.newGroupCheck(groupName);
 
 
     }
