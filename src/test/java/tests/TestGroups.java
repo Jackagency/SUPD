@@ -35,6 +35,16 @@ public class TestGroups {
 
         $("[data-id=groups__actions_btn-create]").click();
         $("div:nth-child(2) >  div > div.v-input__slot div").setValue("Группа");
+        $("div:nth-child(4) div.v-input__slot > div").setValue("Поле описания группы");
+
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+
+
 
 
 
