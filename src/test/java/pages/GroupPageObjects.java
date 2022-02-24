@@ -12,8 +12,8 @@ public class GroupPageObjects {
     //locators
     SelenideElement firstLineInTheTable = $(".dx-column-lines", 1);
 
-    SelenideElement groupNameInput = $("div:nth-child(2) > div > div.v-input__slot input");
-    SelenideElement groupDescriptionInput = $("div:nth-child(4) div.v-input__slot > div input");
+    SelenideElement groupNameInput = $("#group-edit-form_sign");
+    SelenideElement groupDescriptionInput = $("#group-edit-form_desc");
 
 
     //actions

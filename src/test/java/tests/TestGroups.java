@@ -37,22 +37,24 @@ public class TestGroups {
         String groupName = faker.hobbit().character();
         open("login");
         userPageComponents.authorizeSupd("admin", "123");
-
+//перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();
+        //кликаю "Создать"
         groupPageComponents.groupCreateButtonClick();
-
+//заполняю поля имя и описание группы
         groupPageObjects
                 .setGroupName(groupName)
                 .setGroupDescription(groupName);
-
+//Заполняю поля основания
         userPageComponents.reasonForm(
                 "because",
                 "because2",
                 "3234",
                 "Petrov Ivan Dmitrievich",
                 "30.10.2020");
-
+//кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
+        //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(groupName);
 
 

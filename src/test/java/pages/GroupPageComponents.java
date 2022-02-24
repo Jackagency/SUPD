@@ -21,7 +21,7 @@ public class GroupPageComponents {
     }
 
     public GroupPageComponents mainGroupClick() {
-        SelenideElement mainToggleGroupButton =  $("div.v-btn-toggle a:nth-child(2) span");
+        SelenideElement mainToggleGroupButton =  $("[data-id=main-nav_groups]");
         mainToggleGroupButton.shouldBe(visible).click();
         return this;
     }
