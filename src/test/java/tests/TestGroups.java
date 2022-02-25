@@ -1,7 +1,9 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +36,6 @@ public class TestGroups {
         return result.toString();
     }
 
-
     @BeforeAll
     static void beforeAll() {
         Configuration.baseUrl = "http://192.168.151.19:8080/";
@@ -58,7 +59,10 @@ public class TestGroups {
     @MethodSource(value = "mixedGroupCreateProvider")
     @ParameterizedTest (name = "Создание группы с названием содержащим {0}")
      void mixedGroupCreate(String groupName, String groupDescription) {
-        open("login");
+
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
+        userPageComponents.openLoginPage();
         userPageComponents.authorizeSupd("admin", "123");
 //перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();

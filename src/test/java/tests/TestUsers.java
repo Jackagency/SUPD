@@ -1,14 +1,20 @@
 package tests;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.*;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import pages.UserPageComponents;
 import pages.UserPageObjects;
 
-
 import java.util.Random;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.closeWebDriver;
 
 
 
@@ -27,17 +33,20 @@ public class TestUsers {
     public void clearCache() {
         closeWebDriver();
     }
-
     @Test
+    @Feature("Тестирование влкадки пользователи")
+    @Story("Создание, редактирование, удаление пользователя")
     @DisplayName("User create")
     public void userCreate() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
         Random random = new Random();
         //random word
         StringBuilder word = new StringBuilder(15);
         for (int i = 0; i < 15; i++) {
             word.append((char) ('a' + random.nextInt(26)));
         }
-        open("/users");
+        userPageComponents.openLoginPage();
         userPageComponents.authorizeSupd("admin", "123");
         userPageComponents.userCreateButton();
         //ввожу данные пользователя
@@ -77,8 +86,12 @@ public class TestUsers {
     }
 
     @Test
+    @Feature("Тестирование влкадки пользователи")
+    @Story("Создание, редактирование, удаление пользователя")
     @DisplayName("User edit")
     public void userEdit(){
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
         //random word
         Random random = new Random();
         StringBuilder word = new StringBuilder(15);
@@ -87,7 +100,7 @@ public class TestUsers {
             word.append((char) ('a' + random.nextInt(26)));
             word2.append((char) ('a' + random.nextInt(26)));
         }
-        open("/users");
+        userPageComponents.openLoginPage();
         userPageComponents.authorizeSupd("admin", "123");
         userPageComponents.userCreateButton();
         //ввожу данные пользователя
@@ -153,8 +166,12 @@ public class TestUsers {
     }
 
     @Test
+    @Feature("Тестирование влкадки пользователи")
+    @Story("Создание, редактирование, удаление пользователя")
     @DisplayName("User delete")
     public void userDelete(){
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
         //random word
         Random random = new Random();
         StringBuilder word = new StringBuilder(15);
@@ -162,7 +179,7 @@ public class TestUsers {
             word.append((char) ('a' + random.nextInt(26)));
         }
 
-        open("/users");
+        userPageComponents.openLoginPage();
         userPageComponents.authorizeSupd("admin", "123");
         userPageComponents.userCreateButton();
         //ввожу данные пользователя
