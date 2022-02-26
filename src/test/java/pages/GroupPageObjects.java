@@ -2,6 +2,7 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import org.openqa.selenium.Keys;
 
 
 import static com.codeborne.selenide.Condition.*;
@@ -29,6 +30,12 @@ public class GroupPageObjects {
     @Step("Вводим описание группы")
     public GroupPageObjects setGroupDescription (String groupDescription) {
         groupDescriptionInput.setValue(groupDescription);
+        return this;
+    }
+    @Step("Очищаем стрые значения в полях")
+    public GroupPageObjects clearGroupCreationFields(){
+        groupNameInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        groupDescriptionInput.sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         return this;
     }
 

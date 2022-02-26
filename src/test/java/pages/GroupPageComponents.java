@@ -6,9 +6,9 @@ import io.qameta.allure.Step;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.withText;
+import static com.codeborne.selenide.Selenide.*;
 
 public class GroupPageComponents {
 
@@ -33,6 +33,47 @@ public class GroupPageComponents {
         groupCreateButton.shouldBe(visible).click();
         return this;
     }
+    @Step("Открываем меню действия с группой")
+    public GroupPageComponents groupMenuOpen() {
+        SelenideElement groupMenuButton = $("[data-id=actions_btn]");
+        groupMenuButton.shouldBe(visible).click();
+        return this;
+    }
+    @Step("Кликаем редактировать")
+    public GroupPageComponents groupEditButton() {
+        SelenideElement groupEditButton = $("[data-id=actions_btn_edit]");
+        groupEditButton.shouldBe(visible).click();
+        return this;
+    }
+    @Step("Кликаем удалить")
+    public GroupPageComponents groupDeleteButton() {
+        SelenideElement groupDeleteButton = $("[data-id=actions_btn_delete]");
+        groupDeleteButton.shouldBe(visible).click();
+        return this;
+    }
+    @Step("Кликаем Подтвердить удаление")
+    public GroupPageComponents groupDeleteSubmit() {
+        SelenideElement groupDeleteSubmitButton = $("[data-id=confirm_submit]");
+        groupDeleteSubmitButton.shouldBe(visible).click();
+        return this;
+    }
+    @Step("Проверяем что удаленной группы нет в списке групп")
+    public GroupPageComponents emptyTableCheck() {
+        SelenideElement emptyTableSign = $(".dx-datagrid-nodata");
+        emptyTableSign.shouldBe(visible).shouldHave(text("Нет данных"));
+        return this;
+    }
+    @Step("Подвтерждаем удаление")
+    public GroupPageComponents deleteSubmitWindow(){
+        SelenideElement deleteSubmitText = $(".simple-modal__text");
+        SelenideElement deleteSubmit = $("div:nth-child(8) .v-btn:nth-child(1) span");
+        deleteSubmitText.shouldHave(text("К группе привязано 0 пользователей. Вы действительно хотите удалить группу?"));
+        deleteSubmit.click();
+        deleteSubmitText.shouldBe(not(visible), Duration.ofMillis(15000));
+        return this;
+    }
 
-    
+
+
+
 }

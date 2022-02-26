@@ -6,6 +6,8 @@ import com.github.javafaker.Faker;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -57,8 +59,8 @@ public class TestGroups {
     }
 
     @MethodSource(value = "mixedGroupCreateProvider")
-    @ParameterizedTest (name = "Создание группы с названием содержащим {0}")
-     void mixedGroupCreate(String groupName, String groupDescription) {
+    @ParameterizedTest(name = "Создание группы с названием содержащим {0}")
+    void mixedGroupCreate(String groupName, String groupDescription) {
 
         SelenideLogger.addListener("allure", new AllureSelenide());
 
@@ -84,4 +86,120 @@ public class TestGroups {
         //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(groupName);
     }
+
+    @Test
+    @DisplayName("Редактирование группы")
+    void groupEdit() {
+        Random random = new Random();
+        //random word
+        StringBuilder word = new StringBuilder(15);
+        StringBuilder word2 = new StringBuilder(15);
+        for (int i = 0; i < 15; i++) {
+            word.append((char) ('a' + random.nextInt(26)));
+            word2.append((char) ('a' + random.nextInt(26)));
+        }
+
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
+        userPageComponents.openLoginPage();
+        userPageComponents.authorizeSupd("admin", "123");
+//перехожу на основную вкладку Группы
+        groupPageComponents.mainGroupClick();
+        //кликаю "Создать"
+        groupPageComponents.groupCreateButtonClick();
+//заполняю поля имя и описание группы
+        groupPageObjects
+                .setGroupName(String.valueOf(word))
+                .setGroupDescription(String.valueOf(word));
+//Заполняю поля основания
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+//кликаю подтвердить
+        groupPageComponents.clickGroupSubmitButton();
+        //проверяю в поиске созданную группу
+        groupPageObjects.newGroupCheck(String.valueOf(word));
+        //открываю выбор действия с группой
+        groupPageComponents.groupMenuOpen();
+        //кликаю редактировать
+        groupPageComponents.groupEditButton();
+        //очищаю старые поля сигнатура и описание
+        groupPageObjects.clearGroupCreationFields();
+        //вношу новые значения
+        groupPageObjects
+                .setGroupName(String.valueOf(word2))
+                .setGroupDescription(String.valueOf(word2));
+//Заполняю поля основания
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+//кликаю подтвердить
+        groupPageComponents.clickGroupSubmitButton();
+        //проверяю что измененная группа есть в списке
+        groupPageObjects.newGroupCheck(String.valueOf(word2));
+    }
+
+    @Test
+    @DisplayName("Удаление группы")
+    void groupDelete() {
+        Random random = new Random();
+        //random word
+        StringBuilder word = new StringBuilder(15);
+        StringBuilder word2 = new StringBuilder(15);
+        for (int i = 0; i < 15; i++) {
+            word.append((char) ('a' + random.nextInt(26)));
+            word2.append((char) ('a' + random.nextInt(26)));
+        }
+
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
+        userPageComponents.openLoginPage();
+        userPageComponents.authorizeSupd("admin", "123");
+//перехожу на основную вкладку Группы
+        groupPageComponents.mainGroupClick();
+        //кликаю "Создать"
+        groupPageComponents.groupCreateButtonClick();
+//заполняю поля имя и описание группы
+        groupPageObjects
+                .setGroupName(String.valueOf(word))
+                .setGroupDescription(String.valueOf(word));
+//Заполняю поля основания
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+//кликаю подтвердить
+        groupPageComponents.clickGroupSubmitButton();
+        //проверяю в поиске созданную группу
+        groupPageObjects.newGroupCheck(String.valueOf(word));
+        //открываю выбор действия с группой
+        groupPageComponents.groupMenuOpen();
+        //Выбираю Удалить
+        groupPageComponents.groupDeleteButton();
+        //Заполняю поля основания удаления
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+        //кликаю Подтвердить
+        groupPageComponents.groupDeleteSubmit();
+        //Подтверждаю удаление
+        groupPageComponents.deleteSubmitWindow();
+        //Проверяю что таблица пуста
+        groupPageComponents.emptyTableCheck();
+
+    }
+
+
 }
+

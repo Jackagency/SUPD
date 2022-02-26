@@ -135,6 +135,7 @@ public class UserPageComponents {
         userSurnameTable.scrollIntoView(true).shouldHave(text("Фамилия"));
         return this;
     }
+
     @Step("Проверяем что удаленного пользователя нет в списке пользователей")
     public UserPageComponents emptyTableCheck() {
         SelenideElement emptyTableSign = $(".dx-datagrid-nodata");
