@@ -7,7 +7,6 @@ import io.qameta.allure.Step;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class GroupPageComponents {
@@ -63,10 +62,11 @@ public class GroupPageComponents {
         emptyTableSign.shouldBe(visible).shouldHave(text("Нет данных"));
         return this;
     }
+
     @Step("Подвтерждаем удаление")
     public GroupPageComponents deleteSubmitWindow(){
         SelenideElement deleteSubmitText = $(".simple-modal__text");
-        SelenideElement deleteSubmit = $("div:nth-child(8) .v-btn:nth-child(1) span");
+        SelenideElement deleteSubmit = $("[data-id=confirm-delete]");
         deleteSubmitText.shouldHave(text("К группе привязано 0 пользователей. Вы действительно хотите удалить группу?"));
         deleteSubmit.click();
         deleteSubmitText.shouldBe(not(visible), Duration.ofMillis(15000));

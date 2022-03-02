@@ -55,7 +55,7 @@ public class TestUsers {
                 .setUsetName(String.valueOf(word))
                 .setUserPatronymic(String.valueOf(word))
                 .setUserLogin(String.valueOf(word))
-                .setUserKadrId("1112223334")
+                .setUserKadrId("1112223335")
                 .setUserTabel("1112223334")
                 .setUserPassword("123")
                 .setUserEmail("123@ya.ru");
