@@ -199,6 +199,59 @@ public class TestGroups {
         groupPageComponents.emptyTableCheck();
 
     }
+    @Test
+    @DisplayName("Создание группы с неуникальной сигнатурой")
+    void notUniqueSign(){
+        Random random = new Random();
+        //random word
+        StringBuilder word = new StringBuilder(15);
+        for (int i = 0; i < 15; i++) {
+            word.append((char) ('a' + random.nextInt(26)));
+        }
+
+        SelenideLogger.addListener("allure", new AllureSelenide());
+
+        userPageComponents.openLoginPage();
+        userPageComponents.authorizeSupd("admin", "123");
+//перехожу на основную вкладку Группы
+        groupPageComponents.mainGroupClick();
+        //кликаю "Создать"
+        groupPageComponents.groupCreateButtonClick();
+//заполняю поля имя и описание группы
+        groupPageObjects
+                .setGroupName(String.valueOf(word))
+                .setGroupDescription(String.valueOf(word));
+//Заполняю поля основания
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+//кликаю подтвердить
+        groupPageComponents.clickGroupSubmitButton();
+        //проверяю в поиске созданную группу
+        groupPageObjects.newGroupCheck(String.valueOf(word));
+        //кликаю "Создать"
+        groupPageComponents.groupCreateButtonClick();
+        //заполняю поля имя и описание группы
+        groupPageObjects
+                .setGroupName(String.valueOf(word))
+                .setGroupDescription(String.valueOf(word));
+        //Заполняю поля основания
+        userPageComponents.reasonForm(
+                "because",
+                "because2",
+                "3234",
+                "Petrov Ivan Dmitrievich",
+                "30.10.2020");
+//кликаю подтвердить
+        groupPageComponents.clickGroupSubmitButtonWithError();
+        //проверяю появление и наполнение ошибки
+        groupPageComponents.checkErrorMassage("Ошибка запроса. Группа с данной сигнатурой уже существует");
+
+
+    }
 
 
 }

@@ -15,7 +15,6 @@ public class GroupPageObjects {
     SelenideElement groupNameInput = $("#group-edit-form_sign");
     SelenideElement groupDescriptionInput = $("#group-edit-form_desc");
 
-
     //actions
     @Step ("Смотрим что в результатах поиска появилась созданная группа")
     public GroupPageObjects newGroupCheck(String groupName) {

@@ -20,6 +20,12 @@ public class GroupPageComponents {
         toolbarText.shouldBe(Condition.not(Condition.visible), Duration.ofMillis(15000));
         return this;
     }
+    @Step("Нажимаем кнопку подтвердить")
+    public GroupPageComponents clickGroupSubmitButtonWithError() {
+        SelenideElement groupCreateSubmitButton = $("[data-id=group-edit-form_btn-submit]");
+        groupCreateSubmitButton.scrollIntoView(false).shouldBe(visible).click();
+        return this;
+    }
     @Step("Переходим на вкладку группы нажимая кнопку Группы")
     public GroupPageComponents mainGroupClick() {
         SelenideElement mainToggleGroupButton =  $("[data-id=main-nav_groups]");
@@ -72,8 +78,10 @@ public class GroupPageComponents {
         deleteSubmitText.shouldBe(not(visible), Duration.ofMillis(15000));
         return this;
     }
-
-
-
-
+    @Step("Проверяем наполнение ошибки")
+    public GroupPageComponents checkErrorMassage(String text){
+        SelenideElement errorMassage = $(".toast-text");
+        errorMassage.shouldBe(visible).shouldHave(text(text));
+        return this;
+    }
 }
