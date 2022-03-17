@@ -44,4 +44,15 @@ public class RandomUtils {
 
         return getRandomString(10) + emailDomain;
     }
+
+    public StringBuilder randomString(){
+        Random random = new Random();
+        //random word
+        StringBuilder word = new StringBuilder(15);
+        for (int i = 0; i < 15; i++) {
+            word.append((char) ('a' + random.nextInt(26)));
+        }
+        return word;
+    }
+
 }

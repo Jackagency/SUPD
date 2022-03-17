@@ -1,11 +1,8 @@
 package tests;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,40 +11,33 @@ import org.junit.jupiter.params.provider.MethodSource;
 import pages.GroupPageComponents;
 import pages.GroupPageObjects;
 import pages.UserPageComponents;
+import utils.RandomUtils;
 
 import java.util.Random;
 import java.util.stream.Stream;
 
-import static com.codeborne.selenide.Selenide.*;
+import static utils.RandomUtils.getRandomString;
 
-public class TestGroups {
+public class TestGroups extends TestBase {
 
     UserPageComponents userPageComponents = new UserPageComponents();
     GroupPageComponents groupPageComponents = new GroupPageComponents();
     GroupPageObjects groupPageObjects = new GroupPageObjects();
+    RandomUtils randomUtils = new RandomUtils();
 
-    //Стринг рандомайзер
-    public static String getRandomString(int length) {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder result = new StringBuilder();
-        Random rnd = new Random();
-        while (result.length() < length) {
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            result.append(SALTCHARS.charAt(index));
-        }
-        return result.toString();
-    }
 
-    @BeforeAll
-    static void beforeAll() {
-        Configuration.baseUrl = "http://192.168.151.19:8080/";
-        Configuration.browserSize = "1920x1080";
-    }
+    //поля авторизации
+    String login = "admin";
+    String password = "123";
+    //поля основания
+    String reason = "because";
+    String type = "because2";
+    String number = "3234";
+    String name = "Petrov Ivan Dmitrievich";
+    String date = "30.10.2020";
+    //тексты ошибок
+    String samegrouperror = "Ошибка запроса. Группа с данной сигнатурой уже существует";
 
-    @AfterEach
-    public void clearCache() {
-        closeWebDriver();
-    }
 
     static Stream<Arguments> mixedGroupCreateProvider() {
         Faker faker = new Faker();
@@ -65,23 +55,18 @@ public class TestGroups {
         SelenideLogger.addListener("allure", new AllureSelenide());
 
         userPageComponents.openLoginPage();
-        userPageComponents.authorizeSupd("admin", "123");
-//перехожу на основную вкладку Группы
+        userPageComponents.authorizeSupd(login, password);
+        //перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();
         //кликаю "Создать"
         groupPageComponents.groupCreateButtonClick();
-//заполняю поля имя и описание группы
+        //заполняю поля имя и описание группы
         groupPageObjects
                 .setGroupName(groupName)
                 .setGroupDescription(groupDescription);
-//Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        //Заполняю поля основания
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
         //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(groupName);
@@ -90,35 +75,24 @@ public class TestGroups {
     @Test
     @DisplayName("Редактирование группы")
     void groupEdit() {
-        Random random = new Random();
-        //random word
-        StringBuilder word = new StringBuilder(15);
-        StringBuilder word2 = new StringBuilder(15);
-        for (int i = 0; i < 15; i++) {
-            word.append((char) ('a' + random.nextInt(26)));
-            word2.append((char) ('a' + random.nextInt(26)));
-        }
-
         SelenideLogger.addListener("allure", new AllureSelenide());
 
+        String word = String.valueOf(randomUtils.randomString());
+        String word2 = String.valueOf(randomUtils.randomString());
+
         userPageComponents.openLoginPage();
-        userPageComponents.authorizeSupd("admin", "123");
-//перехожу на основную вкладку Группы
+        userPageComponents.authorizeSupd(login, password);
+        //перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();
         //кликаю "Создать"
         groupPageComponents.groupCreateButtonClick();
-//заполняю поля имя и описание группы
+        //заполняю поля имя и описание группы
         groupPageObjects
                 .setGroupName(String.valueOf(word))
                 .setGroupDescription(String.valueOf(word));
-//Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        //Заполняю поля основания
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
         //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(String.valueOf(word));
@@ -132,14 +106,9 @@ public class TestGroups {
         groupPageObjects
                 .setGroupName(String.valueOf(word2))
                 .setGroupDescription(String.valueOf(word2));
-//Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        //Заполняю поля основания
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
         //проверяю что измененная группа есть в списке
         groupPageObjects.newGroupCheck(String.valueOf(word2));
@@ -148,35 +117,24 @@ public class TestGroups {
     @Test
     @DisplayName("Удаление группы")
     void groupDelete() {
-        Random random = new Random();
-        //random word
-        StringBuilder word = new StringBuilder(15);
-        StringBuilder word2 = new StringBuilder(15);
-        for (int i = 0; i < 15; i++) {
-            word.append((char) ('a' + random.nextInt(26)));
-            word2.append((char) ('a' + random.nextInt(26)));
-        }
 
         SelenideLogger.addListener("allure", new AllureSelenide());
 
+        String word = String.valueOf(randomUtils.randomString());
+
         userPageComponents.openLoginPage();
-        userPageComponents.authorizeSupd("admin", "123");
-//перехожу на основную вкладку Группы
+        userPageComponents.authorizeSupd(login, password);
+        //перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();
         //кликаю "Создать"
         groupPageComponents.groupCreateButtonClick();
-//заполняю поля имя и описание группы
+        //заполняю поля имя и описание группы
         groupPageObjects
                 .setGroupName(String.valueOf(word))
                 .setGroupDescription(String.valueOf(word));
-//Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        //Заполняю поля основания
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
         //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(String.valueOf(word));
@@ -185,12 +143,7 @@ public class TestGroups {
         //Выбираю Удалить
         groupPageComponents.groupDeleteButton();
         //Заполняю поля основания удаления
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
+        userPageComponents.reasonForm(reason, type, number, name, date);
         //кликаю Подтвердить
         groupPageComponents.groupDeleteSubmit();
         //Подтверждаю удаление
@@ -199,36 +152,29 @@ public class TestGroups {
         groupPageComponents.emptyTableCheck();
 
     }
+
     @Test
     @DisplayName("Создание группы с неуникальной сигнатурой")
-    void notUniqueSign(){
-        Random random = new Random();
-        //random word
-        StringBuilder word = new StringBuilder(15);
-        for (int i = 0; i < 15; i++) {
-            word.append((char) ('a' + random.nextInt(26)));
-        }
+    void notUniqueSign() {
 
         SelenideLogger.addListener("allure", new AllureSelenide());
 
+        String word = String.valueOf(randomUtils.randomString());
+
+
         userPageComponents.openLoginPage();
-        userPageComponents.authorizeSupd("admin", "123");
-//перехожу на основную вкладку Группы
+        userPageComponents.authorizeSupd(login, password);
+        //перехожу на основную вкладку Группы
         groupPageComponents.mainGroupClick();
         //кликаю "Создать"
         groupPageComponents.groupCreateButtonClick();
-//заполняю поля имя и описание группы
+        //заполняю поля имя и описание группы
         groupPageObjects
                 .setGroupName(String.valueOf(word))
                 .setGroupDescription(String.valueOf(word));
-//Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        //Заполняю поля основания
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButton();
         //проверяю в поиске созданную группу
         groupPageObjects.newGroupCheck(String.valueOf(word));
@@ -239,16 +185,11 @@ public class TestGroups {
                 .setGroupName(String.valueOf(word))
                 .setGroupDescription(String.valueOf(word));
         //Заполняю поля основания
-        userPageComponents.reasonForm(
-                "because",
-                "because2",
-                "3234",
-                "Petrov Ivan Dmitrievich",
-                "30.10.2020");
-//кликаю подтвердить
+        userPageComponents.reasonForm(reason, type, number, name, date);
+        //кликаю подтвердить
         groupPageComponents.clickGroupSubmitButtonWithError();
         //проверяю появление и наполнение ошибки
-        groupPageComponents.checkErrorMassage("Ошибка запроса. Группа с данной сигнатурой уже существует");
+        groupPageComponents.checkErrorMassage(samegrouperror);
 
 
     }
